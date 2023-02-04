@@ -45,11 +45,18 @@ userSchema.pre("save", function (next) {
 userSchema.methods.checkPassword = function (attempt, callback) {
   bcrypt.compare(attempt, this.password, (err, isMatch) => {
     // if there was an error, passes it.
-    if (err) return callback(err)
+    if (err) return callback(err);
 
     // if pw is valid, callback is called passing in null to say there is no error, and wether the pw is a match via a boolean.
-    return callback(null, isMatch)
-  })
+    return callback(null, isMatch);
+  });
+};
+
+// method to return user object without user password to be used with token and response
+userSchema.methods.withoutPassword = function () {
+  user = this.toObject();
+  delete user.password;
+  return user;
 };
 
 module.exports = mongoose.model("User", userSchema);

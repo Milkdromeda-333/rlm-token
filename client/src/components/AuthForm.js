@@ -4,12 +4,13 @@ export default function AuthForm(props){
   const {
     handleChange, 
     handleSubmit, 
-    btnText, 
+    btnText,
     inputs: {
       username, 
       password
     } 
   } = props
+
   
   return (
     <form onSubmit={handleSubmit}>

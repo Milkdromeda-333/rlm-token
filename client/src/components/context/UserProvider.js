@@ -17,7 +17,8 @@ export default function UserProvider(props){
   const initState = { 
     user: JSON.parse(localStorage.getItem("user")) || {}, 
     token: localStorage.getItem("token") || "", 
-    todos: [] 
+    todos: [],
+    errMsg: ""
   }
 
   const [userState, setUserState] = useState(initState)
@@ -35,7 +36,7 @@ export default function UserProvider(props){
           token
         }))
       })
-      .catch(err => console.log(err.response.data))
+      .catch(err => handleAuthErr(err.response.data))
   }
 
 
@@ -65,6 +66,20 @@ export default function UserProvider(props){
       token: "",
       todos: []
     })
+  }
+
+  function handleAuthErr(err) {
+    setUserState(prev => ({
+      ...prev,
+      err
+    }));
+  }
+
+  function resetAuthErr(){
+    setUserState(prev => ({
+      ...prev,
+      err: ""
+    }))
   }
 
   function getUserTodos(){
@@ -97,7 +112,9 @@ export default function UserProvider(props){
         login,
         logout,
         addTodo,
-        getUserTodos
+        getUserTodos,
+        resetAuthErr,
+        handleAuthErr
       }}>
       { props.children }
     </UserContext.Provider>
